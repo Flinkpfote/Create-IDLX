@@ -1,44 +1,28 @@
-package com.vladiscrafter.createidlx.content.source;
+package com.vladiscrafter.createidlx.content.displayLink.source;
 
-import com.simibubi.create.content.contraptions.elevator.ElevatorColumn;
 import com.simibubi.create.content.contraptions.elevator.ElevatorContactBlockEntity;
-import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlock;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.source.SingleLineDisplaySource;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 import com.vladiscrafter.createidlx.CreateIDLX;
+import com.vladiscrafter.createidlx.util.elevator.ElevatorContactBlockEntityExt;
 import com.vladiscrafter.createidlx.util.widget.ModularGuiLineBuilderExt;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class CurrentTargetFloorDisplaySource extends SingleLineDisplaySource {
+public class CurrentFloorExtendedDisplaySource extends SingleLineDisplaySource {
     @Override
     protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
         if (!(context.getSourceBlockEntity() instanceof ElevatorContactBlockEntity ecbe))
             return EMPTY_LINE;
 
         ecbe = (ElevatorContactBlockEntity) context.getSourceBlockEntity();
-        ElevatorColumn ec = ElevatorColumn.get(context.level(), ecbe.columnCoords);
-        if (ec == null) return EMPTY_LINE;
-        int targetY = ec.getTargetedYLevel();
 
-        String shortName = "";
-        String longName = "";
-
-        for (BlockPos bp : ec.getContacts()) {
-            if (bp.getY() != targetY) continue;
-            var be = context.level().getBlockEntity(bp);
-
-            if (be instanceof ElevatorContactBlockEntity contact) {
-                shortName = contact.shortName;
-                longName = contact.longName;
-                break;
-            }
-        }
+        String shortName = ecbe.lastReportedCurrentFloor;
+        String longName = ((ElevatorContactBlockEntityExt) ecbe).createidlx$getLastReportedCurrentFloorLongName();
 
         int floorDisplayMode = context.sourceConfig().getInt("FloorDisplayMode");
         boolean showEmptyFloorDescription = context.sourceConfig().getInt("ShowEmptyFloorDescription") == 1;
@@ -56,18 +40,13 @@ public class CurrentTargetFloorDisplaySource extends SingleLineDisplaySource {
     }
 
     @Override
-    public int getPassiveRefreshTicks() {
-        return 20;
-    }
-
-    @Override
     protected boolean allowsLabeling(DisplayLinkContext context) {
         return true;
     }
 
     @Override
     protected String getTranslationKey() {
-        return "current_target_floor";
+        return "current_floor_extended";
     }
 
     @Override
