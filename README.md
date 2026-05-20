@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com/VladisCrafter/Create-IDLX/main/icon.png" width="192" height="192" alt="C: IDLX mod icon">
+<img src="https://raw.githubusercontent.com/Flinkpfote/Create-IDLX/main/icon.png" width="192" height="192" alt="C: IDLX mod icon">
 <h1>Unofficial Fix Release – Create: Improved Display Link Experience</h1>
 
 <p><strong>This is an unofficial bug‑fix build based on the original Create‑IDLX mod.<br>
